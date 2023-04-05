@@ -54,4 +54,20 @@ public class StudentControllerTest {
         Assert.assertArrayEquals(mockStudent.getGrades(), createdStudent.getGrades(), 0.001);
         Assert.assertEquals(mockStudent.getAverageGrade(), createdStudent.getAverageGrade(), 0.001);
     }
+
+    @Test
+    public void testGetStudent() {
+        Student mockStudent = new Student("Ion Popescu", "ion.popescu@gmail.com", 22, new double[]{9.0, 8.0});
+
+        String studentId = "642d31d5a249a13d08983f55";
+        Mockito.when(studentRepository.findById(studentId)).thenReturn(Optional.of(mockStudent));
+
+        Student retrievedStudent = studentController.getStudent(studentId);
+
+        Assert.assertEquals(mockStudent.getId(), retrievedStudent.getId());
+        Assert.assertEquals(mockStudent.getName(), retrievedStudent.getName());
+        Assert.assertEquals(mockStudent.getEmail(), retrievedStudent.getEmail());
+        Assert.assertEquals(mockStudent.getAge(), retrievedStudent.getAge());
+
+    }
 }
