@@ -89,4 +89,12 @@ public class StudentControllerTest {
         Mockito.verify(studentRepository).findById(studentId);
         Mockito.verify(studentRepository).save(Mockito.any(Student.class));
     }
+    @Test
+    public void testDeleteStudent() {
+        Student mockStudent = new Student("Ion Popescu", "ion.popescu@gmail.com", 22, new double[]{9.0, 8.0});
+
+        String studentId = "642d31d5a249a13d08983f55";
+        studentController.deleteStudent(studentId);
+        Mockito.verify(studentRepository).deleteById(studentId);
+    }
 }
