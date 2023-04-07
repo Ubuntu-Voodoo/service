@@ -54,4 +54,13 @@ public class StudentControllerTest {
         Assert.assertArrayEquals(mockStudent.getGrades(), createdStudent.getGrades(), 0.001);
         Assert.assertEquals(mockStudent.getAverageGrade(), createdStudent.getAverageGrade(), 0.001);
     }
+
+    @Test
+    public void testDeleteStudent() {
+        Student mockStudent = new Student("Ion Popescu", "ion.popescu@gmail.com", 22, new double[]{9.0, 8.0});
+
+        String studentId = "642d31d5a249a13d08983f55";
+        studentController.deleteStudent(studentId);
+        Mockito.verify(studentRepository).deleteById(studentId);
+    }
 }
