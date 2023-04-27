@@ -64,7 +64,22 @@ public class StudentControllerIT {
         assertEquals(age, student.getAge());
         assertEquals(Arrays.toString(grades), Arrays.toString(student.getGrades()));
     }
-
+    @Test
+    public void EditStudent() {
+       Student student = studentController.getStudent("642d31d5a249a13d08983f55");
+       Student editedStudent = studentController.editStudent(student.getId(), "New Name", "newemail@gmail.com", 23);
+       Assertions.assertEquals(student.getId(), "642d31d5a249a13d08983f55");
+       Assertions.assertEquals(student.getName(), "New Name");
+       Assertions.assertEquals(student.getEmail(), "newemail@gmail.com");
+       Assertions.assertEquals(student.getAge(), 23); 
+        
+        
+    }
+    
+    
+    
+    
+    
     @Test
     void getStudent() {
         Student student = studentController.getStudent("642d31d5a249a13d08983f55");
