@@ -9,8 +9,25 @@ import ro.unibuc.hello.data.StudentRepository;
 import ro.unibuc.hello.data.Student;
 import ro.unibuc.hello.dto.StudentDTO;
 import ro.unibuc.hello.controller.StudentController;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.util.MultiValueMap;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Tag("IT")
 public class StudentControllerIT {
     @Autowired
@@ -25,44 +42,45 @@ public class StudentControllerIT {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
-    private List<Student> testStudents;
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @LocalServerPort
+    private int port;
 
     @BeforeEach
-    public void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-
-        Student student1 = new Student("John", "john@gmail.com", 20, new double[]{8, 9, 7.5});
-        Student student2 = new Student("Alice", "alice@gmail.com", 21, new double[]{10, 9.5, 9});
-        Student student3 = new Student("Bob", "bob@gmail.com", 22, new double[]{7, 8, 7});
-
-        testStudents = Arrays.asList(student1, student2, student3);
-
-        studentRepository.saveAll(testStudents);
+    void setUp() {
+        studentRepository.deleteAll();
     }
 
     @Test
-    public void testCreateStudent() throws Exception {
-        String name = "Mary";
-        String email = "mary@gmail.com";
-        int age = 19;
-        double[] grades = new double[]{7, 8.5, 9};
+    void createStudent() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/student/create")
-                .param("name", name)
-                .param("email", email)
-                .param("age", String.valueOf(age))
-                .param("grades", Arrays.toString(grades))
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andReturn();
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("name", "John Doe");
+        params.add("email", "johndoe@example.com");
+        params.add("age", "25");
+        params.add("grades", "9.5");
+        params.add("grades", "8.7");
 
-        String content = result.getResponse().getContentAsString();
-        Student student = studentRepository.findById(content).orElse(null);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+        ResponseEntity<Student> response = restTemplate.postForEntity(
+                "http://localhost:" + port + "/student/create",
+                request,
+                Student.class);
 
-        assertEquals(name, student.getName());
-        assertEquals(email, student.getEmail());
-        assertEquals(age, student.getAge());
-        assertEquals(Arrays.toString(grades), Arrays.toString(student.getGrades()));
+        Student student = response.getBody();
+
+        Assertions.assertNotNull(student);
+        Assertions.assertNotNull(student.getId());
+        Assertions.assertEquals(student.getName(), "John Doe");
+        Assertions.assertEquals(student.getEmail(), "johndoe@example.com");
+        Assertions.assertEquals(student.getAge(), 25);
+        Assertions.assertEquals(student.getGrades().length, 2);
+        Assertions.assertEquals(student.getGrades()[0], 9.5);
+        Assertions.assertEquals(student.getGrades()[1], 8.7);
     }
     @Test
     public void EditStudent() {
