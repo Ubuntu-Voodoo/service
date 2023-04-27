@@ -90,13 +90,22 @@ public class StudentControllerIT {
        Assertions.assertEquals(student.getName(), "New Name");
        Assertions.assertEquals(student.getEmail(), "newemail@gmail.com");
        Assertions.assertEquals(student.getAge(), 23); 
-        
-        
     }
     
-    
-    
-    
+    @Test
+    public void testSortByAge() throws Exception {
+        Student s1 = new Student("Alina", "alice@yahoo.com", 20, new double[] { 7.5, 8.0 });
+        Student s2 = new Student("Bogdan", "bogdan@yahoo.com", 22, new double[] { 9.0, 8.5 });
+        Student s3 = new Student("Cristian", "cristian@gmail.com", 18, new double[] { 6.5, 7.0 });
+        List<Student> students = Arrays.asList(s1, s2, s3);
+        when(studentRepository.findAll()).thenReturn(students);
+        mockMvc.perform(get("/student/sortByAge"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(students.size())))
+            .andExpect(jsonPath("$[0].name", is("Cristian")))
+            .andExpect(jsonPath("$[1].name", is("Alina")))
+            .andExpect(jsonPath("$[2].name", is("Bogdan")));
+    }
     
     @Test
     void getStudent() {
