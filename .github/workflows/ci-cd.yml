@@ -27,25 +27,21 @@ jobs:
       - name: Build and test
         run: make build
 
-  # deploy:
-  #   needs: build-and-test  # Wait for the "build-and-test" job to complete successfully
-  #   runs-on: ubuntu-latest
+  deploy:
+    needs: build-and-test  # Wait for the "build-and-test" job to complete successfully
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
-  #       with:
-  #         submodules: true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
 
-  #     - name: Set up JDK
-  #       uses: actions/setup-java@v2
-  #       with:
-  #         java-version: '11'
-  #         distribution: 'adopt'
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
 
-  #     - name: Build and package
-  #       run: |
-  #         # Replace with your build command
-  #         # For example, if you're using Maven, you can use: mvn clean package
-  #         # If you're using Gradle, you can use: ./gradlew clean build
-  #         # Replace the command below with the appropriate one for your project
+      - name: Build and package
+        run: make build
