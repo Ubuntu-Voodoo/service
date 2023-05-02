@@ -1,0 +1,52 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main # Trigger the workflow on push to the main branch
+  pull_request:
+    branches:
+      - main # Trigger the workflow on pull requests targeting the main branch
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: "11"
+
+      - name: Build and test
+        run: make build
+
+  # deploy:
+  #   needs: build-and-test
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+
+  #     - name: Set up JDK
+  #       uses: actions/setup-java@v2
+  #       with:
+  #         java-version: "11" # Set the desired Java version
+
+  #     - name: Build and package
+  #       run: |
+  #         # Replace with your build command
+  #         # For example, if you're using Maven, you can use: mvn clean package
+  #         # If you're using Gradle, you can use: ./gradlew clean build
+  #         # Replace the command below with the appropriate one for your project
+  #         echo "Replace this line with your build command"
+
+  #     - name: Deploy to production
+  #       run: |
+  #         # Replace this command with your deployment script or commands
+  #         # For example, you can deploy to a cloud provider or run a Docker container
+  #         echo "Replace this line with your deployment script or commands"

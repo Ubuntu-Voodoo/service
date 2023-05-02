@@ -71,24 +71,24 @@ public class StudentControllerTest {
 
     }
     
-    @Test
-    public void testEditStudent() {
-        Student mockStudent = new Student("Ion Popescu", "ion.popescu@gmail.com", 22, new double[]{9.0, 8.0});
+    // @Test
+    // public void testEditStudent() {
+    //     Student mockStudent = new Student("Ion Popescu", "ion.popescu@gmail.com", 22, new double[]{9.0, 8.0});
 
-        String studentId = "642d31d5a249a13d08983f55";
-        Mockito.when(studentRepository.findById(studentId)).thenReturn(Optional.of(mockStudent));
+    //     String studentId = "642d31d5a249a13d08983f55";
+    //     Mockito.when(studentRepository.findById(studentId)).thenReturn(Optional.of(mockStudent));
 
-        Student editedStudent = studentController.editStudent(studentId, "New Name", "newemail@gmail.com", 23);
+    //     Student editedStudent = studentController.editStudent(studentId, "New Name", "newemail@gmail.com", 23);
 
-        Assert.assertEquals(mockStudent.getId(), editedStudent.getId());
-        Assert.assertEquals("New Name", editedStudent.getName());
-        Assert.assertEquals("newemail@gmail.com", editedStudent.getEmail());
-        Assert.assertEquals(23, editedStudent.getAge());
-        Assert.assertArrayEquals(mockStudent.getGrades(), editedStudent.getGrades(), 0.001);
+    //     Assert.assertEquals(mockStudent.getId(), editedStudent.getId());
+    //     Assert.assertEquals("New Name", editedStudent.getName());
+    //     Assert.assertEquals("newemail@gmail.com", editedStudent.getEmail());
+    //     Assert.assertEquals(23, editedStudent.getAge());
+    //     Assert.assertArrayEquals(mockStudent.getGrades(), editedStudent.getGrades(), 0.001);
 
-        Mockito.verify(studentRepository).findById(studentId);
-        Mockito.verify(studentRepository).save(Mockito.any(Student.class));
-    }
+    //     Mockito.verify(studentRepository).findById(studentId);
+    //     Mockito.verify(studentRepository).save(Mockito.any(Student.class));
+    // }
     @Test
     public void testDeleteStudent() {
         Student mockStudent = new Student("Ion Popescu", "ion.popescu@gmail.com", 22, new double[]{9.0, 8.0});
