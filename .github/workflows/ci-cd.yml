@@ -15,27 +15,33 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          submodules: true
 
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
           java-version: "11"
+          distribution: "adopt"
 
       - name: Build and test
         run: make build
 
   # deploy:
-  #   needs: build-and-test
+  #   needs: build-and-test  # Wait for the "build-and-test" job to complete successfully
   #   runs-on: ubuntu-latest
 
   #   steps:
   #     - name: Checkout code
   #       uses: actions/checkout@v2
+  #       with:
+  #         submodules: true
 
   #     - name: Set up JDK
   #       uses: actions/setup-java@v2
   #       with:
-  #         java-version: "11" # Set the desired Java version
+  #         java-version: '11'
+  #         distribution: 'adopt'
 
   #     - name: Build and package
   #       run: |
@@ -43,10 +49,3 @@ jobs:
   #         # For example, if you're using Maven, you can use: mvn clean package
   #         # If you're using Gradle, you can use: ./gradlew clean build
   #         # Replace the command below with the appropriate one for your project
-  #         echo "Replace this line with your build command"
-
-  #     - name: Deploy to production
-  #       run: |
-  #         # Replace this command with your deployment script or commands
-  #         # For example, you can deploy to a cloud provider or run a Docker container
-  #         echo "Replace this line with your deployment script or commands"
