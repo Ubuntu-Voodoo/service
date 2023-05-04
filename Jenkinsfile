@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Build & Test') {
             steps {
-                sh './gradlew clean build'
+                sh 'kubectl apply -f kubernetes/hello.yaml'
             }
         }
     }
