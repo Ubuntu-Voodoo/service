@@ -25,6 +25,8 @@ public class StudentController {
     @Autowired
     MeterRegistry metricsRegistry;
 
+    private final AtomicLong counter = new AtomicLong();
+
     @PostMapping("/student/create")
     @ResponseBody
     @Timed(value = "hello.greeting.time", description = "Time taken to return greeting")
